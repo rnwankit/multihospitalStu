@@ -44,6 +44,7 @@ const data = [
 
 function Medicine(props) {
     const [, setReRender] = useState({})
+    const [update, setUpdate] = useState({})
 
     //localStorage.removeItem("medicineData")
 
@@ -60,6 +61,7 @@ function Medicine(props) {
 
     const handleReRender = () => {
         setReRender({})
+        setUpdate({})
     }
 
     const handleDelete = (id) => {
@@ -76,14 +78,21 @@ function Medicine(props) {
         console.log(afterDelete)
     }
 
+    const handleEdit = (id) => {
+        const updateData = localMdata.filter((l) => l.id === id)
+        setUpdate(updateData[0])
+        console.log(updateData[0])
+        console.log(id)
+    }
+
     return (
         <div className="container ">
-            <AddMedicine rerender={() => handleReRender()} />
+            <AddMedicine update={update} rerender={() => handleReRender()} />
             <div className="row">
                 {
                     localMdata.map((d) => {
                         return (
-                            <List onDelete={() => handleDelete(d.id)} name={d.name} price={d.price} quantity={d.quantity} expiry={d.expiry} />
+                            <List onDelete={() => handleDelete(d.id)} onEdit={() => handleEdit(d.id)} name={d.name} price={d.price} quantity={d.quantity} expiry={d.expiry} />
                         )
                     })
                 }

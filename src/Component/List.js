@@ -19,7 +19,8 @@ function List(props) {
                     
                     <CardText>Price: {props.price != undefined ? props.price : null}</CardText>
                     <CardText>Expiry: {props.expiry != undefined ? props.expiry : null}</CardText>
-                    <Button onClick={() => props.onDelete()}>Delete</Button>
+                    <Button style={{marginRight: '8px'}} color="primary" onClick={() => props.onEdit()}>Edit</Button>
+                    <Button color="danger" onClick={() => props.onDelete()}>Delete</Button>
                 </CardBody>
             </Card>
         </div>
