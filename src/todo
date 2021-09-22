@@ -7,3 +7,11 @@ Edit
     - Based on condition change value and onChange of each Input
     - Create and implement handleUpdateChange and handleUpdate method
     - Use rerender and setInputFields to refresh page
+
+Search && Sort
+===================
+    - Create Search & Sort in Medicine.js
+    - Create search and sort state
+    - Create data state and use it in whole component
+    - Implement handleSearch method and also use it into useEffect
+    - Implement handleSort method

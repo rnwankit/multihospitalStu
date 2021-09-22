@@ -16,10 +16,7 @@ function AddMedicine(props) {
 
     const localData = JSON.parse(localStorage.getItem("medicineData"))
 
-
     const handleChange = (e, index) => {
-        
-        
         const data = [...inputFields]
 
         if (e.target.name == "name") {
@@ -71,7 +68,7 @@ function AddMedicine(props) {
     const handleUpdate = () => {
         const values = [...localData]
 
-        //console.log(inputFields)
+        //
         let afterUpdate = values.map((v) => {
             if (v.id === updateData.id) {
                 return updateData
@@ -79,7 +76,7 @@ function AddMedicine(props) {
                 return v
             }
         })
-        console.log(afterUpdate)
+        
 
         localStorage.removeItem("medicineData")
         localStorage.setItem("medicineData", JSON.stringify(afterUpdate)) 
@@ -89,13 +86,13 @@ function AddMedicine(props) {
     }
 
     const handleUpdateChange = (e) => {
-        console.log("handleUpdateChange")
+        
         setUpdateData((value) =>({...value, [e.target.name]: e.target.name === "name" ? e.target.value : parseInt(e.target.value)}))
 
         
     }
 
-    console.log(props.update)
+    
 
     return (
         <main id="main">
