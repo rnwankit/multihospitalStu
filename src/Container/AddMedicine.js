@@ -10,6 +10,7 @@ function AddMedicine(props) {
 
     useEffect(
         () => {
+            console.log("props.update"+JSON.stringify(props.update))
             setUpdateData(props.update)
         },
     [props.update])
@@ -17,6 +18,7 @@ function AddMedicine(props) {
     const localData = JSON.parse(localStorage.getItem("medicineData"))
 
     const handleChange = (e, index) => {
+        console.log("handleChangeA")
         const data = [...inputFields]
 
         if (e.target.name == "name") {
@@ -32,9 +34,8 @@ function AddMedicine(props) {
         setInputFields(data)
     }
 
-    
-
     const handleSubmit = () => {
+        console.log("handleSubmitA")
         //let localData = JSON.parse(localStorage.getItem("medicineData"))
         const values = [...localData]
         
@@ -54,18 +55,21 @@ function AddMedicine(props) {
     }
 
     const handleAdd = (index) => {
+        console.log("handleAddA")
         const oldData = [...inputFields]
         oldData.splice(index+1, 0, { name: '', price: 0, quantity: 0, expiry: 0 })
         setInputFields(oldData)
     }
 
     const handleRemove = (index) => {
+        console.log("handleRemoveA")
         const oldData = [...inputFields]
         oldData.splice(index, 1)
         setInputFields(oldData)
     }
 
     const handleUpdate = () => {
+        console.log("handleUpdateA")
         const values = [...localData]
 
         //
@@ -86,13 +90,9 @@ function AddMedicine(props) {
     }
 
     const handleUpdateChange = (e) => {
-        
-        setUpdateData((value) =>({...value, [e.target.name]: e.target.name === "name" ? e.target.value : parseInt(e.target.value)}))
-
-        
+        console.log("handleUpdateChangeA")
+        setUpdateData((value) =>({...value, [e.target.name]: e.target.name === "name" ? e.target.value : parseInt(e.target.value)}))    
     }
-
-    
 
     return (
         <main id="main">

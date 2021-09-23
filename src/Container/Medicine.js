@@ -53,9 +53,25 @@ function Medicine(props) {
 
     useEffect(
         () => {
-            handleSearch()
+            //handleSearch()
+            loadData()
         },
-    [search])
+    [])
+
+    const loadData = () => {
+        let localData = localStorage.getItem("medicineData")
+
+        let localMData
+
+        if (localData === null) {
+            localStorage.setItem("medicineData", JSON.stringify(orgData))
+            localMData = data
+        } else {
+            localMData = JSON.parse(localData)
+        }
+
+        setData(localMData)
+    }
 
     const handleReRender = () => {
         let udata = JSON.parse(localStorage.getItem("medicineData"))
@@ -73,7 +89,7 @@ function Medicine(props) {
         alert("Delete medicine successfully")
         setReRender({})
         let udata = JSON.parse(localStorage.getItem("medicineData"))
-        setData(udata)        
+        setData(udata)
     }
 
     const handleEdit = (id) => {
@@ -81,26 +97,19 @@ function Medicine(props) {
         setUpdate(updateData[0])
     }
 
-    const handleSearch = () => {
+    const handleSearch = (e) => {
         let filterData
-        if (search != '') {
+        console.log(e.target.value)
+        if (e.target.value !== '') {
             filterData = data.filter((m) =>
-            (m.name.toLowerCase().includes(search.toLowerCase()) ||
-                m.quantity.toString().includes(search) ||
-                m.expiry.toString().includes(search) ||
-                m.price.toString().includes(search)))
+            (m.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                m.quantity.toString().includes(e.target.value) ||
+                m.expiry.toString().includes(e.target.value) ||
+                m.price.toString().includes(e.target.value)))
+                setData(filterData)
         } else {
-            let localData = localStorage.getItem("medicineData")
-        
-            if (localData === null) {
-                localStorage.setItem("medicineData", JSON.stringify(orgData))
-                filterData = data
-            } else {
-                filterData = JSON.parse(localData)
-            }
+            loadData()
         }
-
-        setData(filterData)
     }
 
     const handleSort = (e) => {
@@ -118,7 +127,7 @@ function Medicine(props) {
                     return a.quantity - b.quantity
                 }
             })
-            setData(sortData)            
+            setData(sortData)
         } else {
             let d = JSON.parse(localStorage.getItem("medicineData"));
             setData(d)
@@ -131,7 +140,7 @@ function Medicine(props) {
             <AddMedicine update={update} rerender={() => handleReRender()} />
             <div className="row">
                 <div className="col-md-5">
-                    <Input type="search" value={search} onChange={(e) => {setSearch(e.target.value); handleSearch()}} placeholder="Search" />
+                    <Input type="search" onChange={(e) => handleSearch(e)} placeholder="Search" />
                 </div>
                 <div className="col-md-5">
                     <Input type="select" name="sort" onChange={(e) => handleSort(e)}>
@@ -146,21 +155,21 @@ function Medicine(props) {
             </div>
             <div className="row">
                 {
-                    data !== undefined && data.length > 0 && Object.keys(data).length > 0?
-                    data.map((d, index) => {
-                        return (
-                            <List 
-                                onDelete={() => handleDelete(d.id)} 
-                                onEdit={() => handleEdit(d.id)} 
-                                id={d.id}
-                                name={d.name} 
-                                price={d.price} 
-                                quantity={d.quantity} 
-                                expiry={d.expiry} />
-                        )
-                    })
-                    : <p>Loading</p>
-                } 
+                    data !== undefined && data.length > 0 ?
+                        data.map((d, index) => {
+                            return (
+                                <List
+                                    onDelete={() => handleDelete(d.id)}
+                                    onEdit={() => handleEdit(d.id)}
+                                    id={d.id}
+                                    name={d.name}
+                                    price={d.price}
+                                    quantity={d.quantity}
+                                    expiry={d.expiry} />
+                            )
+                        })
+                        : <p>Loading</p>
+                }
             </div>
         </div>
     );
