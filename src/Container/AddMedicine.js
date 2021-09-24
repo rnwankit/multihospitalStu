@@ -144,7 +144,7 @@ function AddMedicine(props) {
                                             :
                                                 <div className="col-md-2">
                                                     <Button onClick={() => handleAdd(index)} style={{ marginRight: '8px' }} color="primary">+</Button>
-                                                    <Button onClick={() => handleRemove(index)} color="danger">-</Button>
+                                                    <Button disabled={inputFields.length === 1 ? true : false} onClick={() => handleRemove(index)} color="danger">-</Button>
                                                 </div>
                                         }
                                     </div>

@@ -45,9 +45,9 @@ function Medicine(props) {
         },
     ]
     const [, setReRender] = useState({})
-    const [update, setUpdate] = useState({})
-    const [search, setSearch] = useState('')
+    const [update, setUpdate] = useState({})    
     const [data, setData] = useState([{}])
+    const [search, setSearch] = useState('')
 
     //localStorage.removeItem("medicineData")
 
@@ -74,8 +74,7 @@ function Medicine(props) {
     }
 
     const handleReRender = () => {
-        let udata = JSON.parse(localStorage.getItem("medicineData"))
-        setData(udata)
+        loadData()
         setReRender({})
         setUpdate({})
     }
@@ -88,8 +87,7 @@ function Medicine(props) {
 
         alert("Delete medicine successfully")
         setReRender({})
-        let udata = JSON.parse(localStorage.getItem("medicineData"))
-        setData(udata)
+        loadData()
     }
 
     const handleEdit = (id) => {
@@ -99,6 +97,7 @@ function Medicine(props) {
 
     const handleSearch = (e) => {
         let filterData
+        setSearch(e.target.value)
         console.log(e.target.value)
         if (e.target.value !== '') {
             filterData = data.filter((m) =>
@@ -129,8 +128,7 @@ function Medicine(props) {
             })
             setData(sortData)
         } else {
-            let d = JSON.parse(localStorage.getItem("medicineData"));
-            setData(d)
+            loadData()
         }
         setReRender({})
     }
@@ -168,7 +166,7 @@ function Medicine(props) {
                                     expiry={d.expiry} />
                             )
                         })
-                        : <p>Loading</p>
+                        : search !== '' ? <div className='text-center'> <h4>Not found</h4> </div>  : <p>Loading</p>
                 }
             </div>
         </div>
