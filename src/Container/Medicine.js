@@ -45,10 +45,12 @@ function Medicine(props) {
         },
     ]
     const [, setReRender] = useState({})
-    const [update, setUpdate] = useState({})    
+    const [update, setUpdate] = useState({})
     const [data, setData] = useState([{}])
+    const [filterData, setFilterData] = useState()
+    const [sortData, setSortData] = useState()
+    const [sort, setSort] = useState('')
     const [search, setSearch] = useState('')
-
     //localStorage.removeItem("medicineData")
 
     useEffect(
@@ -56,7 +58,7 @@ function Medicine(props) {
             //handleSearch()
             loadData()
         },
-    [])
+        [search, sort])
 
     const loadData = () => {
         let localData = localStorage.getItem("medicineData")
@@ -96,42 +98,52 @@ function Medicine(props) {
     }
 
     const handleSearch = (e) => {
-        let filterData
         setSearch(e.target.value)
-        console.log(e.target.value)
         if (e.target.value !== '') {
-            filterData = data.filter((m) =>
-            (m.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-                m.quantity.toString().includes(e.target.value) ||
-                m.expiry.toString().includes(e.target.value) ||
-                m.price.toString().includes(e.target.value)))
-                setData(filterData)
+            let filterDataL = data.filter((m) =>
+                (m.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                    m.quantity.toString().includes(e.target.value) ||
+                    m.expiry.toString().includes(e.target.value) ||
+                    m.price.toString().includes(e.target.value)))
+            setFilterData(filterDataL)
         } else {
+            setFilterData()
+            handleSort('', "yes")
+            setSearch('')
+            //setSort("0")
             loadData()
         }
     }
 
-    const handleSort = (e) => {
-        if (e.target.value !== "0") {
-            let sortData = data.sort((a, b) => {
-                if (e.target.value === 'pl') {
+    const handleSort = (e ='', empty='') => {
+        let finalData = filterData && empty ==='' ? filterData : data;
+        let val = e != '' ? e.target.value : sort
+        
+        setSort(val)
+
+        if (val !== "0") {
+            let sortData = finalData.sort((a, b) => {
+                if (val === 'pl') {
                     return a.price - b.price
-                } else if (e.target.value === 'ph') {
+                } else if (val === 'ph') {
                     return b.price - a.price
-                } else if (e.target.value === "name") {
+                } else if (val === "name") {
                     return a.name.localeCompare(b.name)
-                } else if (e.target.value === "expiry") {
+                } else if (val === "expiry") {
                     return a.expiry - b.expiry
-                } else if (e.target.value === "quantity") {
+                } else if (val === "quantity") {
                     return a.quantity - b.quantity
                 }
             })
-            setData(sortData)
+            setSortData(sortData)
         } else {
+            setSortData()
             loadData()
         }
         setReRender({})
     }
+
+    let finalData = filterData ? filterData : sortData ? sortData : data;
 
     return (
         <div className="container ">
@@ -141,7 +153,7 @@ function Medicine(props) {
                     <Input type="search" onChange={(e) => handleSearch(e)} placeholder="Search" />
                 </div>
                 <div className="col-md-5">
-                    <Input type="select" name="sort" onChange={(e) => handleSort(e)}>
+                    <Input type="select" name="sort" value={sort} onChange={(e) => handleSort(e)}>
                         <option value="0">Select</option>
                         <option value="pl">Price: Low to High</option>
                         <option value="ph">Price: High to Low</option>
@@ -153,8 +165,8 @@ function Medicine(props) {
             </div>
             <div className="row">
                 {
-                    data !== undefined && data.length > 0 ?
-                        data.map((d, index) => {
+                    finalData !== undefined && finalData.length > 0 ?
+                        finalData.map((d, index) => {
                             return (
                                 <List
                                     onDelete={() => handleDelete(d.id)}
@@ -166,7 +178,8 @@ function Medicine(props) {
                                     expiry={d.expiry} />
                             )
                         })
-                        : search !== '' ? <div className='text-center'> <h4>Not found</h4> </div>  : <p>Loading</p>
+                        : search !== '' ? <div className='text-center'> <h4>Not found</h4> </div> 
+                    : <p>Loading</p>
                 }
             </div>
         </div>

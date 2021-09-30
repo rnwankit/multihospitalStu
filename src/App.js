@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Header from './Component/Header';
 import Footer from './Component/Footer';
@@ -8,10 +7,11 @@ import Departments from './Container/Departments';
 import Doctors from './Container/Doctors';
 import About from './Container/About';
 import Contact from './Container/Contact';
-import Appointment from './Container/Appointment';
 import Login from './Container/Login';
 import Medicine from './Container/Medicine';
 import AddMedicine from './Container/AddMedicine';
+import AddAppointment from './Container/AddAppointment';
+import ListAppointment from './Container/ListAppointment';
 
 function App() {
   return (
@@ -23,7 +23,8 @@ function App() {
         <Route path="/doctors" component={Doctors} />
         <Route path="/about" component={About} />
         <Route path="/contact" component={Contact} />
-        <Route path="/appointment" component={Appointment} />
+        <Route path="/add_appointment" component={AddAppointment} />
+        <Route path="/list_appointment" component={ListAppointment} />
         <Route path="/login" component={Login} />
         <Route path="/medicine" component={Medicine} />
         <Route path="/addmedicine" component={AddMedicine} />

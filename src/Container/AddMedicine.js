@@ -90,8 +90,10 @@ function AddMedicine(props) {
     }
 
     const handleUpdateChange = (e) => {
-        console.log("handleUpdateChangeA")
+        //console.log("handleUpdateChangeA " + e.target.value)
         setUpdateData((value) =>({...value, [e.target.name]: e.target.name === "name" ? e.target.value : parseInt(e.target.value)}))    
+        
+        console.log(updateData)
     }
 
     return (
