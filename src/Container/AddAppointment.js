@@ -7,10 +7,12 @@ function AddAppointment(props) {
     const [values, setValues] = useState({})
     const [errors, setErrors] = useState({})
     const [validate, setValidate] = useState(false)
+    const [editData, setEditData] = useState({})
     const history = useHistory();
 
 
     const handleChanges = (e) => {
+        console.log(e.target.name + " " + e.target.value)
         setValues(values => ({ ...values, [e.target.name]: e.target.value }))
     }
 
@@ -20,8 +22,6 @@ function AddAppointment(props) {
         let phoneErr = true
         let dateErr = true
         let deptErr = true
-
-        console.log(values)
 
         if (values.name != undefined) {
             if (values.name == "") {
@@ -55,7 +55,7 @@ function AddAppointment(props) {
         if (values.phone == "") {
             setErrors(errors => ({ ...errors, phone: "Please enter your mobile number" }));
         } else {
-            console.log(values.phone)
+            
             if (values.phone !== undefined) {
                 var regex = /^[1-9]\d{9}$/;
                 if (regex.test(values.phone) === false) {
@@ -105,11 +105,20 @@ function AddAppointment(props) {
         }
     }
 
+    console.log(props)
     useEffect(
         () => {
             validation()
+            const localData = JSON.parse(localStorage.getItem("appointment"))
+
+            if (localData && props.location.state !== undefined) {
+                let dd = props.location.state.id !== undefined ? localData.filter((l) => l.id === props.location.state.id) : null
+
+                props.location.state.id ? setEditData(dd[0]) : setEditData()
+            }
+            history.replace()
         },
-        [values])
+        [])
 
     const submitData = () => {
         let isValid = true  // assume that form is validated
@@ -151,12 +160,17 @@ function AddAppointment(props) {
 
     const handleInsert = () => {
         let localData = JSON.parse(localStorage.getItem("appointment"))
+        
 
-        if (localData === null) {
+        if (localData === null || localData.length === 0) {
             let arrData = []
+            
+            values["id"] = 1
             arrData.push(values)
             localStorage.setItem("appointment", JSON.stringify(arrData))
         } else {
+            let n = localData[localData.length-1].id + 1
+            values["id"] = n
             localData.push(values)
             localStorage.removeItem("appointment")
             localStorage.setItem("appointment", JSON.stringify(localData))
@@ -164,6 +178,39 @@ function AddAppointment(props) {
 
         history.push("/list_appointment")
     }
+
+    const handleUpdateChange = (e) => {
+        
+        setEditData((value) =>({...value, [e.target.name]: e.target.value }))    
+        
+        
+    }
+
+    const handleUpdate = () => {
+        
+        const values = JSON.parse(localStorage.getItem("appointment"))
+
+        let afterUpdate = values.map((v) => {
+            if (v.id === editData.id) {
+                return editData
+            } else {
+                return v
+            }
+        })
+        
+
+        localStorage.removeItem("appointment")
+        localStorage.setItem("appointment", JSON.stringify(afterUpdate)) 
+        alert("Update appointment successfully")
+        setEditData({})
+        props.history.push("/list_appointment");
+    }
+
+    
+
+    //const dataFrom = editData ? localData.filter((l) => l.id === editData.id) : null
+
+    //console.table(dataFrom)
 
     return (
         <main id="main">
@@ -192,34 +239,38 @@ function AddAppointment(props) {
                         <div className="row">
                             <div className="col-md-4 form-group">
                                 <input
+                                    value={editData ? editData.name : ''}
                                     type="text"
                                     name="name"
                                     className="form-control"
                                     id="name"
                                     placeholder="Your Name"
-                                    onChange={(e) => handleChanges(e)}
+                                    onChange={(e) => editData.name ? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.name != undefined ? errors.name : ''}</p>
                             </div>
                             <div className="col-md-4 form-group mt-3 mt-md-0">
                                 <input
+                                    value={editData ? editData.email : ''}
                                     type="email"
                                     className="form-control"
                                     name="email"
                                     id="email"
                                     placeholder="Your Email"
-                                    onChange={(e) => handleChanges(e)}
+                                    onChange={(e) => editData.email ? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.email != undefined ? errors.email : ''}</p>
                             </div>
                             <div className="col-md-4 form-group mt-3 mt-md-0">
                                 <input
+                                    value={editData ? editData.phone : ''}
                                     type="tel"
                                     onChange={(e) => handleChanges(e)}
                                     className="form-control"
                                     name="phone"
                                     id="phone"
                                     placeholder="Your Phone"
+                                    onChange={(e) => editData.phone ? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.phone != undefined ? errors.phone : ''}</p>
                             </div>
@@ -227,17 +278,19 @@ function AddAppointment(props) {
                         <div className="row">
                             <div className="col-md-4 form-group mt-3">
                                 <input
+                                    value={editData ? editData.date : ''}
                                     type="date"
                                     onChange={(e) => handleChanges(e)}
                                     name="date"
                                     className="form-control datepicker"
                                     id="date"
                                     placeholder="Appointment Date"
+                                    onChange={(e) => editData.date ? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.date != undefined ? errors.date : ''}</p>
                             </div>
                             <div className="col-md-4 form-group mt-3">
-                                <select onChange={(e) => handleChanges(e)} name="department" id="department" className="form-select">
+                                <select value={editData ? editData.department : ''} onChange={(e) => editData.department ? handleUpdateChange(e) : handleChanges(e)} name="department" id="department" className="form-select">
                                     <option value="0">Select Department</option>
                                     <option value="general">General</option>
                                     <option value="dental">Dental</option>
@@ -247,14 +300,28 @@ function AddAppointment(props) {
                             </div>
                         </div>
                         <div className="form-group mt-3">
-                            <textarea className="form-control" name="message" rows={5} placeholder="Message (Optional)" defaultValue={""} />
+                            <textarea 
+                                defaultValue={editData.message ? editData.message : ''} 
+                                onChange={(e) => editData.message ? handleUpdateChange(e) : handleChanges(e)}  
+                                className="form-control" 
+                                name="message" 
+                                rows={5} 
+                                placeholder="Message (Optional)" 
+                            ></textarea>
                         </div>
                         <div className="mb-3">
                             <div className="loading">Loading</div>
                             <div className="error-message" />
                             <div className="sent-message">Your appointment request has been sent successfully. Thank you!</div>
                         </div>
-                        <div className="text-center"><button onClick={() => submitData()}>Make an Appointment</button></div>
+                        <div className="text-center">
+                            {
+                                Object.keys(editData).length !== 0 ? 
+                                    <button onClick={() => handleUpdate()}>Update an Appointment</button>        
+                                :
+                                    <button onClick={() => submitData()}>Make an Appointment</button>
+                            }
+                        </div>
                     </div>
                 </div>
             </section>

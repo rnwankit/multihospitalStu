@@ -20,6 +20,11 @@ const loadData = () => {
     }
 }
 
+const handleEdit = () => {
+  
+}
+
+console.log(data)
   return (
     <main id="main">
       <section id="appointment" className="appointment">
@@ -57,6 +62,8 @@ const loadData = () => {
                                     date={d.date}
                                     dept={d.department}
                                     message={d.message}
+                                    onDelete={"fromListAptDelete"}
+                                    onEdit={"fromListAptEdit"}                                 
                                      />
                             )
                         })

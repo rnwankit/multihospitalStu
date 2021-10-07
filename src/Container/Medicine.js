@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import { Input } from 'reactstrap';
 import List from '../Component/List';
 import AddMedicine from './AddMedicine';
-
-
 
 function Medicine(props) {
     const orgData = [
@@ -51,14 +48,12 @@ function Medicine(props) {
     const [sortData, setSortData] = useState()
     const [sort, setSort] = useState('')
     const [search, setSearch] = useState('')
-    //localStorage.removeItem("medicineData")
-
+    
     useEffect(
         () => {
-            //handleSearch()
             loadData()
         },
-        [search, sort])
+    [])
 
     const loadData = () => {
         let localData = localStorage.getItem("medicineData")

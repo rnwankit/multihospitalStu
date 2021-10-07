@@ -12,6 +12,7 @@ import Medicine from './Container/Medicine';
 import AddMedicine from './Container/AddMedicine';
 import AddAppointment from './Container/AddAppointment';
 import ListAppointment from './Container/ListAppointment';
+import Delete from './Component/CRUD/Delete';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/medicine" component={Medicine} />
         <Route path="/addmedicine" component={AddMedicine} />
+        <Route path="/delete" component={Delete} />
         <Redirect to="/" />
       </Switch>
       <Footer />
