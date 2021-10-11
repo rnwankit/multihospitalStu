@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input } from 'reactstrap';
 
 function AddMedicine(props) {
-    const [values, setValues] = useState({})
     const [inputFields, setInputFields] = useState([
         { name: '', price: 0, quantity: 0, expiry: 0 }
     ])
 
+    const  [updateData, setUpdateData] = useState({})
+
+    useEffect(
+        () => {
+            console.log("props.update"+JSON.stringify(props.update))
+            setUpdateData(props.update)
+        },
+    [props.update])
+
+    const localData = JSON.parse(localStorage.getItem("medicineData"))
+
     const handleChange = (e, index) => {
-        console.log(e.target.name)
-        console.log(e.target.value)
+        console.log("handleChangeA")
         const data = [...inputFields]
 
         if (e.target.name == "name") {
@@ -25,39 +34,66 @@ function AddMedicine(props) {
         setInputFields(data)
     }
 
-    console.log(inputFields)
-
     const handleSubmit = () => {
-        let localData = JSON.parse(localStorage.getItem("medicineData"))
-        console.log(localData)
-        console.log(localData[localData.length-1].id + 1) //localData[4]
-
-        let n = localData[localData.length-1].id + 1;
+        console.log("handleSubmitA")
+        //let localData = JSON.parse(localStorage.getItem("medicineData"))
+        const values = [...localData]
+        
+        let n = values[values.length-1].id + 1;
         let newData = inputFields.map((i) => ({...i, "id": n++ }))
 
-        console.log(newData)
-
-        newData.map((n1) => localData.push(n1))
+        newData.map((n1) => values.push(n1))
 
         localStorage.removeItem("medicineData")
-        localStorage.setItem("medicineData", JSON.stringify(localData)) 
-
-        let localData1 = JSON.parse(localStorage.getItem("medicineData"))
-        console.log(localData1)
+        localStorage.setItem("medicineData", JSON.stringify(values)) 
+        
         alert("Medicine added successfully.")
+        setInputFields([
+            { name: '', price: 0, quantity: 0, expiry: 0 }
+        ])
         props.rerender()
     }
 
     const handleAdd = (index) => {
+        console.log("handleAddA")
         const oldData = [...inputFields]
         oldData.splice(index+1, 0, { name: '', price: 0, quantity: 0, expiry: 0 })
         setInputFields(oldData)
     }
 
     const handleRemove = (index) => {
+        console.log("handleRemoveA")
         const oldData = [...inputFields]
         oldData.splice(index, 1)
         setInputFields(oldData)
+    }
+
+    const handleUpdate = () => {
+        console.log("handleUpdateA")
+        const values = [...localData]
+
+        //
+        let afterUpdate = values.map((v) => {
+            if (v.id === updateData.id) {
+                return updateData
+            } else {
+                return v
+            }
+        })
+        
+
+        localStorage.removeItem("medicineData")
+        localStorage.setItem("medicineData", JSON.stringify(afterUpdate)) 
+        alert("Update medicine successfully")
+        props.rerender({})
+        setUpdateData({})
+    }
+
+    const handleUpdateChange = (e) => {
+        //console.log("handleUpdateChangeA " + e.target.value)
+        setUpdateData((value) =>({...value, [e.target.name]: e.target.name === "name" ? e.target.value : parseInt(e.target.value)}))    
+        
+        console.log(updateData)
     }
 
     return (
@@ -73,16 +109,30 @@ function AddMedicine(props) {
                                 <>
                                     <div key={index} className="row">
                                         <div className="col-md-2">
-                                            <Input value={i.name} onChange={(e) => handleChange(e, index)} name="name" placeholder="Name" />
+                                            <Input 
+                                                value={updateData.name && index === 0 ? updateData.name : i.name} 
+                                                onChange={(e) => updateData.name && index===0 ? handleUpdateChange(e) : handleChange(e, index)} 
+                                                name="name" 
+                                                placeholder="Name" 
+                                                />
                                         </div>
                                         <div className="col-md-2">
-                                            <Input value={i.price} onChange={(e) => handleChange(e, index)} name="price" placeholder="Price" />
+                                            <Input 
+                                                value={updateData.price && index === 0 ? updateData.price : i.price} 
+                                                onChange={(e) => updateData.price && index===0 ? handleUpdateChange(e) : handleChange(e, index)} 
+                                                name="price" 
+                                                placeholder="Price" 
+                                                />
                                         </div>
                                         <div className="col-md-2">
-                                            <Input value={i.quantity} onChange={(e) => handleChange(e, index)} name="quantity" placeholder="quantity" />
+                                            <Input 
+                                                value={updateData.quantity && index === 0 ? updateData.quantity : i.quantity} 
+                                                onChange={(e) => updateData.quantity && index===0 ? handleUpdateChange(e) : handleChange(e, index)} 
+                                                name="quantity" 
+                                                placeholder="quantity" />
                                         </div>
                                         <div className="col-md-2">
-                                            <Input value={i.expiry} onChange={(e) => handleChange(e, index)} type="select" name="expiry">
+                                            <Input value={updateData.expiry  && index===0 ? updateData.expiry : i.expiry}  onChange={(e) => updateData.expiry && index===0 ? handleUpdateChange(e) : handleChange(e, index)}  type="select" name="expiry">
                                                 <option>2021</option>
                                                 <option>2022</option>
                                                 <option>2023</option>
@@ -90,10 +140,15 @@ function AddMedicine(props) {
                                                 <option>2025</option>
                                             </Input>
                                         </div>
-                                        <div className="col-md-2">
-                                            <Button onClick={() => handleAdd(index)} style={{ marginRight: '8px' }} color="primary">+</Button>
-                                            <Button onClick={() => handleRemove(index)} color="danger">-</Button>
-                                        </div>
+                                        {
+                                            Object.keys(props.update).length !== 0 ? 
+                                                null
+                                            :
+                                                <div className="col-md-2">
+                                                    <Button onClick={() => handleAdd(index)} style={{ marginRight: '8px' }} color="primary">+</Button>
+                                                    <Button disabled={inputFields.length === 1 ? true : false} onClick={() => handleRemove(index)} color="danger">-</Button>
+                                                </div>
+                                        }
                                     </div>
                                     <br />
                                 </>
@@ -103,7 +158,13 @@ function AddMedicine(props) {
 
                     <div className="row">
                         <div className="col-md-2">
-                            <Button onClick={() => handleSubmit()}>Submit</Button>
+                        {
+                            Object.keys(props.update).length !== 0 ? 
+                                <Button onClick={() => handleUpdate()}>Update</Button>
+                            :
+                                <Button onClick={() => handleSubmit()}>Add</Button>
+                        }
+                            
                         </div>
                     </div>
                 </div>

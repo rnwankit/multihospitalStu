@@ -1,0 +1,17 @@
+Edit
+==================
+    - Create update state in Medicine.js file
+    - Create handleEdit function in Medicine.js file and pass to the List Component
+    - Set update state and pass to AddMedicine.js file (Child Component)
+    - In AddMedicine.js file use update props to initialize updateData state in the useEffect
+    - Based on condition change value and onChange of each Input
+    - Create and implement handleUpdateChange and handleUpdate method
+    - Use rerender and setInputFields to refresh page
+
+Search && Sort
+===================
+    - Create Search & Sort in Medicine.js
+    - Create search and sort state
+    - Create data state and use it in whole component
+    - Implement handleSearch method and also use it into useEffect
+    - Implement handleSort method

@@ -273,6 +273,21 @@ h1, h2, h3, h4, h5, h6 {
 .navbar a:hover, .navbar .active, .navbar li:hover > a {
   color: #FF6337;
   border-color: #FF6337;
+  border-bottom: 2px solid;
+}
+
+.aptNav .col-md-6 {
+  margin-bottom: 16px;
+}
+.aptNav .active {
+  border-bottom: 2px solid #FF6337;
+  color: #FF6337;
+}
+
+.aptNav a {
+  color: #111;
+  font-size: 22px;
+  margin-bottom: 16px;
 }
 
 .navbar .dropdown ul {
