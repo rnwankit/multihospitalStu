@@ -7,7 +7,6 @@ function ListAppointment(props) {
 
   useEffect(
     () => {
-        //handleSearch()
         loadData()
     },
 [])
@@ -20,11 +19,7 @@ const loadData = () => {
     }
 }
 
-const handleEdit = () => {
-  
-}
-
-console.log(data)
+console.log("ListApt")
   return (
     <main id="main">
       <section id="appointment" className="appointment">

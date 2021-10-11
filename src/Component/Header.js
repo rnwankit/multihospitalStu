@@ -62,7 +62,7 @@ const Header = () => {
                          <i className="bi bi-list mobile-nav-toggle" />
                      </nav>
                         <NavLink to="/add_appointment" className="appointment-btn scrollto">
-                            <span className="d-none d-md-inline">Make an</span>
+                            <span className="d-none d-md-inline">Make an </span>
                             Appointment
                         </NavLink>
                         <NavLink to="/Login" className="appointment-btn scrollto">

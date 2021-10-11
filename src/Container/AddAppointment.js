@@ -10,25 +10,21 @@ function AddAppointment(props) {
     const [editData, setEditData] = useState({})
     const history = useHistory();
 
-
-    const handleChanges = (e) => {
-        console.log(e.target.name + " " + e.target.value)
-        setValues(values => ({ ...values, [e.target.name]: e.target.value }))
-    }
-
     const validation = () => {
+        let checkVal = Object.keys(editData).length > 0  ? editData : values
+
         let nameErr = true
         let emailErr = true
         let phoneErr = true
         let dateErr = true
         let deptErr = true
 
-        if (values.name != undefined) {
-            if (values.name == "") {
+        if (checkVal.name != undefined) {
+            if (checkVal.name == "") {
                 setErrors(errors => ({ ...errors, name: "Please enter name" }))
             } else {
                 var regex = /^[a-zA-Z\s]+$/;
-                if (regex.test(values.name) === false) {
+                if (regex.test(checkVal.name) === false) {
                     setErrors(errors => ({ ...errors, name: "Please enter valid name" }))
                 } else {
                     setErrors(errors => ({ ...errors, name: "" }))
@@ -37,13 +33,13 @@ function AddAppointment(props) {
             }
         }
 
-        if (values.email != undefined) {
-            if (values.email == "") {
+        if (checkVal.email != undefined) {
+            if (checkVal.email == "") {
                 setErrors(errors => ({ ...errors, email: "Please enter your email address" }))
             } else {
                 // Regular expression for basic email validation
                 var regex = /^\S+@\S+\.\S+$/;
-                if (regex.test(values.email) === false) {
+                if (regex.test(checkVal.email) === false) {
                     setErrors(errors => ({ ...errors, email: "Please enter a valid email address" }))
                 } else {
                     setErrors(errors => ({ ...errors, email: "" }))
@@ -52,13 +48,13 @@ function AddAppointment(props) {
             }
         }
 
-        if (values.phone == "") {
+        if (checkVal.phone == "") {
             setErrors(errors => ({ ...errors, phone: "Please enter your mobile number" }));
         } else {
             
-            if (values.phone !== undefined) {
+            if (checkVal.phone !== undefined) {
                 var regex = /^[1-9]\d{9}$/;
-                if (regex.test(values.phone) === false) {
+                if (regex.test(checkVal.phone) === false) {
                     setErrors(errors => ({ ...errors, phone: "Please enter a valid 10 digit mobile number" }));
                 } else {
                     setErrors(errors => ({ ...errors, phone: "" }));
@@ -67,35 +63,22 @@ function AddAppointment(props) {
             }
         }
 
-        if (values.date === null) {
-            setErrors(errors => ({ ...errors, date: "Please select date" }));
-        } else {
-            setErrors(errors => ({ ...errors, date: "" }));
-            dateErr = false
+        if (checkVal.date !== undefined) {
+            if (checkVal.date === null) {
+                setErrors(errors => ({ ...errors, date: "Please select date" }));
+            } else {
+                setErrors(errors => ({ ...errors, date: "" }));
+                dateErr = false
+            }
         }
 
-
-
-        // if (country == "Select") {
-        //     printError("countryErr", "Please select your country");
-        // } else {
-        //     printError("countryErr", "");
-        //     countryErr = false;
-        // }
-
-        // if (gender == "") {
-        //     printError("genderErr", "Please select your gender");
-        // } else {
-        //     printError("genderErr", "");
-        //     genderErr = false;
-        // }
-
-
-        if (values.department === "0") {
-            setErrors(errors => ({ ...errors, department: "Please select department" }))
-        } else {
-            setErrors(errors => ({ ...errors, department: "" }))
-            deptErr = false
+        if (checkVal.department !== undefined) {
+            if (checkVal.department === "0") {
+                setErrors(errors => ({ ...errors, department: "Please select department" }));
+            } else {
+                setErrors(errors => ({ ...errors, department: "" }));
+                deptErr = false
+            }
         }
 
         if ((nameErr || emailErr || phoneErr || deptErr || dateErr) == true) {
@@ -105,112 +88,122 @@ function AddAppointment(props) {
         }
     }
 
-    console.log(props)
+    console.log("AddAppointment")
+    
     useEffect(
         () => {
-            validation()
             const localData = JSON.parse(localStorage.getItem("appointment"))
 
-            if (localData && props.location.state !== undefined) {
+            if (localData && props.location.state !== undefined && props.location.state !== null) {
+                
                 let dd = props.location.state.id !== undefined ? localData.filter((l) => l.id === props.location.state.id) : null
 
                 props.location.state.id ? setEditData(dd[0]) : setEditData()
             }
+            validation()
+
             history.replace()
         },
-        [])
+        [values, editData])
 
     const submitData = () => {
         let isValid = true  // assume that form is validated
 
+        let checkVal = Object.keys(editData).length > 0 ? editData : values
+
         isValid = validation()
 
-        if (values.name == undefined) {
+        if (checkVal.name == undefined) {
             setErrors(errors => ({ ...errors, name: "Please enter name" }))
             isValid = false
         }
 
-        if (values.email == undefined) {
-            setErrors(errors => ({ ...errors, email: "Please enter email" }))
+        if (checkVal.email == undefined) {
+            setErrors(errors => ({ ...errors, email: "Please enter emailu" }))
             isValid = false
         }
 
-        if (values.phone == undefined) {
+        if (checkVal.phone == undefined) {
             setErrors(errors => ({ ...errors, phone: "Please enter phone" }))
             isValid = false
         }
 
-        if (values.date == undefined) {
+        if (checkVal.date == undefined) {
             setErrors(errors => ({ ...errors, date: "Please enter date" }))
             isValid = false
         }
 
-        if (values.department == undefined) {
+        if (checkVal.department == undefined) {
             setErrors(errors => ({ ...errors, department: "Please select department" }))
             isValid = false
         }
 
         if (isValid) {
-            setValidate(true)
-            handleInsert()
+            return true
         } else {
-            setValidate(false)
+            return false
         }
     }
 
     const handleInsert = () => {
-        let localData = JSON.parse(localStorage.getItem("appointment"))
+        let validate = submitData()
+
+        if (validate) {
+            let localData = JSON.parse(localStorage.getItem("appointment"))
         
+            if (localData === null || localData.length === 0) {
+                let arrData = []
+                
+                values["id"] = 1
+                arrData.push(values)
+                localStorage.setItem("appointment", JSON.stringify(arrData))
+            } else {
+                let n = localData[localData.length-1].id + 1
+                values["id"] = n
+                localData.push(values)
+                localStorage.removeItem("appointment")
+                localStorage.setItem("appointment", JSON.stringify(localData))
+            }
 
-        if (localData === null || localData.length === 0) {
-            let arrData = []
-            
-            values["id"] = 1
-            arrData.push(values)
-            localStorage.setItem("appointment", JSON.stringify(arrData))
-        } else {
-            let n = localData[localData.length-1].id + 1
-            values["id"] = n
-            localData.push(values)
-            localStorage.removeItem("appointment")
-            localStorage.setItem("appointment", JSON.stringify(localData))
+            history.push("/list_appointment")
         }
-
-        history.push("/list_appointment")
     }
 
-    const handleUpdateChange = (e) => {
+    const handleChanges = (e) => {
+        setValues(values => ({ ...values, [e.target.name]: e.target.value }))
+        validation()
         
+    }
+
+    const handleUpdateChange = (e) => {        
         setEditData((value) =>({...value, [e.target.name]: e.target.value }))    
-        
+        validation()
         
     }
 
     const handleUpdate = () => {
-        
-        const values = JSON.parse(localStorage.getItem("appointment"))
+        let validate = submitData()
 
-        let afterUpdate = values.map((v) => {
-            if (v.id === editData.id) {
-                return editData
-            } else {
-                return v
-            }
-        })
-        
+        if (validate) {
+            const values = JSON.parse(localStorage.getItem("appointment"))
 
-        localStorage.removeItem("appointment")
-        localStorage.setItem("appointment", JSON.stringify(afterUpdate)) 
-        alert("Update appointment successfully")
-        setEditData({})
-        props.history.push("/list_appointment");
-    }
 
+
+            let afterUpdate = values.map((v) => {
+                if (v.id === editData.id) {
+                    return editData
+                } else {
+                    return v
+                }
+            })
     
-
-    //const dataFrom = editData ? localData.filter((l) => l.id === editData.id) : null
-
-    //console.table(dataFrom)
+            localStorage.removeItem("appointment")
+            localStorage.setItem("appointment", JSON.stringify(afterUpdate)) 
+            alert("Update appointment successfully")
+            setEditData({})
+            props.history.push("/list_appointment");
+        }
+    }
 
     return (
         <main id="main">
@@ -245,7 +238,7 @@ function AddAppointment(props) {
                                     className="form-control"
                                     id="name"
                                     placeholder="Your Name"
-                                    onChange={(e) => editData.name ? handleUpdateChange(e) : handleChanges(e)} 
+                                    onChange={(e) => editData.name !== undefined ? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.name != undefined ? errors.name : ''}</p>
                             </div>
@@ -257,7 +250,7 @@ function AddAppointment(props) {
                                     name="email"
                                     id="email"
                                     placeholder="Your Email"
-                                    onChange={(e) => editData.email ? handleUpdateChange(e) : handleChanges(e)} 
+                                    onChange={(e) => editData.email !== undefined ? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.email != undefined ? errors.email : ''}</p>
                             </div>
@@ -270,7 +263,7 @@ function AddAppointment(props) {
                                     name="phone"
                                     id="phone"
                                     placeholder="Your Phone"
-                                    onChange={(e) => editData.phone ? handleUpdateChange(e) : handleChanges(e)} 
+                                    onChange={(e) => editData.phone !== undefined? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.phone != undefined ? errors.phone : ''}</p>
                             </div>
@@ -285,12 +278,13 @@ function AddAppointment(props) {
                                     className="form-control datepicker"
                                     id="date"
                                     placeholder="Appointment Date"
-                                    onChange={(e) => editData.date ? handleUpdateChange(e) : handleChanges(e)} 
+                                    onChange={(e) => editData.date !== undefined? handleUpdateChange(e) : handleChanges(e)} 
                                 />
                                 <p className="errMsg">{errors.date != undefined ? errors.date : ''}</p>
                             </div>
                             <div className="col-md-4 form-group mt-3">
-                                <select value={editData ? editData.department : ''} onChange={(e) => editData.department ? handleUpdateChange(e) : handleChanges(e)} name="department" id="department" className="form-select">
+                                <select value={editData ? editData.department : ''} 
+                                    onChange={(e) => editData.department !== undefined ? handleUpdateChange(e) : handleChanges(e)} name="department" id="department" className="form-select">
                                     <option value="0">Select Department</option>
                                     <option value="general">General</option>
                                     <option value="dental">Dental</option>
@@ -301,8 +295,8 @@ function AddAppointment(props) {
                         </div>
                         <div className="form-group mt-3">
                             <textarea 
-                                defaultValue={editData.message ? editData.message : ''} 
-                                onChange={(e) => editData.message ? handleUpdateChange(e) : handleChanges(e)}  
+                                defaultValue={editData.message !== undefined ? editData.message : ''} 
+                                onKeyUp={(e) => editData.message !== undefined ? handleUpdateChange(e) : handleChanges(e)}  
                                 className="form-control" 
                                 name="message" 
                                 rows={5} 
@@ -319,7 +313,7 @@ function AddAppointment(props) {
                                 Object.keys(editData).length !== 0 ? 
                                     <button onClick={() => handleUpdate()}>Update an Appointment</button>        
                                 :
-                                    <button onClick={() => submitData()}>Make an Appointment</button>
+                                    <button onClick={() => handleInsert()}>Make an Appointment</button>
                             }
                         </div>
                     </div>

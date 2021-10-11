@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function Delete(props) {
-    const {id} = props.location.state
+    
+    useEffect(
+        () => {
+            const {id} = props.location.state
 
-    console.log(props)
-    console.log(id)
+            const newData = JSON.parse(localStorage.getItem("appointment"))
 
-    const newData = JSON.parse(localStorage.getItem("appointment"))
-
-    const afterDelete = newData.filter((d, index) => {
-        return d.id !== id
-    })
-
-    console.log(afterDelete);
-
-    localStorage.setItem('appointment', JSON.stringify(afterDelete))
-    props.history.push("/list_appointment");
+            const afterDelete = newData.filter((d, index) => {
+                return d.id !== id
+            })
+        
+            alert("Delete appointment successfully")
+        
+            localStorage.setItem('appointment', JSON.stringify(afterDelete))
+            
+            props.history.push("/list_appointment");
+        
+        },
+    [props.location.state])
 
     return (
         <div>

@@ -6,9 +6,12 @@ import {
 } from 'reactstrap';
 
 function List(props) {
+
+    console.log("List")
+
     return (
         <div className='col-3 pt-4'>
-            <Card>
+            <Card key={props.id}>
                 <CardBody>
                     <CardTitle tag="h5">{props.name != undefined ? props.name : null}</CardTitle>
                     {
@@ -33,7 +36,7 @@ function List(props) {
                             <Button style={{ marginRight: '8px' }} color="primary" onClick={() => props.onEdit()}>Edit</Button>
                     }
                     {
-                        props.onDelete === "fromListAptDelete" ?
+                        props.onDelete === "fromListAptDelete" ? 
                             <Link className="btn btn-danger" to={{
                                 pathname: '/delete',
                                 state: {
