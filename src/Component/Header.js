@@ -58,6 +58,11 @@ const Header = () => {
                                      Contact
                                  </NavLink>
                              </li>
+                             <li>
+                                 <NavLink className="nav-link scrollto" to="/counter">
+                                     Counter
+                                 </NavLink>
+                             </li>
                          </ul>
                          <i className="bi bi-list mobile-nav-toggle" />
                      </nav>
