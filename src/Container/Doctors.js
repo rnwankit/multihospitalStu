@@ -1,6 +1,10 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Doctors(props) {
+    const dispatch = useDispatch();
+    const Counter = useSelector (state => state.CounterReducer);
+
     return (
         <section id="doctors" className="doctors">
             <div className="container">
@@ -9,6 +13,7 @@ function Doctors(props) {
                     <p>Duis sagittis rutrum neque, quis tincidunt arcu pretium ac. Suspendisse sem risus, molestie vitae arcu et,
                         tincidunt viverra erat. Quisque in lectus id nulla viverra sodales in a risus. Aliquam ut sem ex. Duis viverra
                         ipsum lacus, ut pharetra arcu sagittis nec. Phasellus a eleifend elit.</p>
+                    {/* <p>{Counter.counter}</p> */}
                 </div>
                 <div className="row">
                     <div className="col-lg-6">

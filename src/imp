@@ -1,0 +1,14 @@
+Redux:
+    npm i redux
+    npm i react-redux
+
+    Create Folder redux in src
+        implement store.js
+
+    Create Folder reducers in src/redux
+        implement index.js and other reducer
+
+    Create folder actions in src/redux
+        implement actions
+
+    Use/Modify state in any component using useDispatch() and useSelector() hooks
