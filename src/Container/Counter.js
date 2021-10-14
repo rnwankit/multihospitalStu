@@ -7,7 +7,7 @@ import { increment, decrement } from '../redux/actions/counter.action'
 function Counter(props) {
 
     const dispatch = useDispatch();
-    const Counter = useSelector (state => state.CounterReducer);
+    const Counter = useSelector (state => state.Counter);
 
     console.log(Counter.counter)
 
@@ -23,13 +23,10 @@ function Counter(props) {
         <section id="doctors" className="doctors">
             <div className="container">
                 <div className="section-title">
-                    <h2>Doctors</h2>
-                    <p>Duis sagittis rutrum neque, quis tincidunt arcu pretium ac. Suspendisse sem risus, molestie vitae arcu et,
-                        tincidunt viverra erat. Quisque in lectus id nulla viverra sodales in a risus. Aliquam ut sem ex. Duis viverra
-                        ipsum lacus, ut pharetra arcu sagittis nec. Phasellus a eleifend elit.</p>
+                    <h2>Counter</h2>
                 </div>
                 <div className="row">
-                    <div className="col-lg-6">
+                    <div className="col-lg-12">
                         <Button onClick={() => handleIncrement()}>+</Button>
                         <p>{Counter.counter}</p>
                         <Button onClick={() => handleDecrement()}>-</Button>
