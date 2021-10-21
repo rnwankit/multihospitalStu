@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'reactstrap';
+import { addMedicine, updateMedicine } from '../redux/actions/medicines.action';
 
 function AddMedicine(props) {
     const [inputFields, setInputFields] = useState([
@@ -10,15 +12,14 @@ function AddMedicine(props) {
 
     useEffect(
         () => {
-            console.log("props.update"+JSON.stringify(props.update))
             setUpdateData(props.update)
         },
     [props.update])
 
-    const localData = JSON.parse(localStorage.getItem("medicineData"))
+    const dispatch = useDispatch()
+    const medicines = useSelector(state => state.Medicines)
 
     const handleChange = (e, index) => {
-        console.log("handleChangeA")
         const data = [...inputFields]
 
         if (e.target.name == "name") {
@@ -35,65 +36,30 @@ function AddMedicine(props) {
     }
 
     const handleSubmit = () => {
-        console.log("handleSubmitA")
-        //let localData = JSON.parse(localStorage.getItem("medicineData"))
-        const values = [...localData]
-        
-        let n = values[values.length-1].id + 1;
-        let newData = inputFields.map((i) => ({...i, "id": n++ }))
-
-        newData.map((n1) => values.push(n1))
-
-        localStorage.removeItem("medicineData")
-        localStorage.setItem("medicineData", JSON.stringify(values)) 
-        
-        alert("Medicine added successfully.")
-        setInputFields([
-            { name: '', price: 0, quantity: 0, expiry: 0 }
-        ])
-        props.rerender()
+        dispatch(addMedicine(inputFields))
+        setInputFields([{ name: '', price: 0, quantity: 0, expiry: 0 }])
     }
 
     const handleAdd = (index) => {
-        console.log("handleAddA")
         const oldData = [...inputFields]
         oldData.splice(index+1, 0, { name: '', price: 0, quantity: 0, expiry: 0 })
         setInputFields(oldData)
     }
 
     const handleRemove = (index) => {
-        console.log("handleRemoveA")
+        
         const oldData = [...inputFields]
         oldData.splice(index, 1)
         setInputFields(oldData)
     }
 
-    const handleUpdate = () => {
-        console.log("handleUpdateA")
-        const values = [...localData]
-
-        //
-        let afterUpdate = values.map((v) => {
-            if (v.id === updateData.id) {
-                return updateData
-            } else {
-                return v
-            }
-        })
-        
-
-        localStorage.removeItem("medicineData")
-        localStorage.setItem("medicineData", JSON.stringify(afterUpdate)) 
-        alert("Update medicine successfully")
-        props.rerender({})
+    const handleUpdate = async () => {
+        await dispatch(updateMedicine(updateData))
         setUpdateData({})
     }
 
     const handleUpdateChange = (e) => {
-        //console.log("handleUpdateChangeA " + e.target.value)
-        setUpdateData((value) =>({...value, [e.target.name]: e.target.name === "name" ? e.target.value : parseInt(e.target.value)}))    
-        
-        console.log(updateData)
+        setUpdateData((value) =>({...value, [e.target.name]: e.target.name === "name" ? e.target.value : parseInt(e.target.value)}))
     }
 
     return (
@@ -141,7 +107,7 @@ function AddMedicine(props) {
                                             </Input>
                                         </div>
                                         {
-                                            Object.keys(props.update).length !== 0 ? 
+                                            Object.keys(updateData).length !== 0 ? 
                                                 null
                                             :
                                                 <div className="col-md-2">
@@ -159,7 +125,7 @@ function AddMedicine(props) {
                     <div className="row">
                         <div className="col-md-2">
                         {
-                            Object.keys(props.update).length !== 0 ? 
+                            Object.keys(updateData).length !== 0 ? 
                                 <Button onClick={() => handleUpdate()}>Update</Button>
                             :
                                 <Button onClick={() => handleSubmit()}>Add</Button>

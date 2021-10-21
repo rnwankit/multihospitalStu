@@ -21,7 +21,6 @@ function List(props) {
                             null
                     }
 
-                    {props.id ? <CardText>ID:  {props.id} </CardText> : null}
                     {props.price ? <CardText>Price:  {props.price} </CardText> : null}
                     {props.expiry ? <CardText>Expiry:  {props.expiry} </CardText> : null}
                     {

@@ -12,3 +12,48 @@ Redux:
         implement actions
 
     Use/Modify state in any component using useDispatch() and useSelector() hooks
+
+Install redux-thunk
+
+
+Redux with JSON-SERVER
+    npm install -g json-server
+
+    open PowerShell as admin
+        Set-ExecutionPolicy Unrestricted
+        y
+
+    json-server --watch db.json --port 3001
+
+{
+  "medicines": [
+    {
+      "id": 101,
+      "name": "Abacavir",
+      "quantity": 25,
+      "price": 150,
+      "expiry": 2022
+    },
+    {
+      "id": 103,
+      "name": "Meloxicam",
+      "quantity": 85,
+      "price": 450,
+      "expiry": 2025
+    },
+    {
+      "id": 104,
+      "name": "Allopurinol",
+      "quantity": 50,
+      "price": 600,
+      "expiry": 2023
+    },
+    {
+      "id": 105,
+      "name": "Phenytoin",
+      "quantity": 63,
+      "price": 250,
+      "expiry": 2021
+    }
+  ]
+}
