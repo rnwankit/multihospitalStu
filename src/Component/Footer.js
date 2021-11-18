@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import ThemeContext from '../ThemeContext';
 
 function Footer(props) {
+    const theme = useContext(ThemeContext)
     return (
-        <footer id="footer">
+        <footer id="footer" className={theme.theme === 'dark' ? 'dark' : ''}>
             <div className="container d-md-flex py-4">
                 <div className="me-md-auto text-center text-md-start">
                     <div>

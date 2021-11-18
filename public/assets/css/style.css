@@ -1779,3 +1779,13 @@ section {
 .errMsg {
   color: red;
 }
+
+.light {
+  color: black !important;
+  background-color: white !important;
+}
+
+.dark {
+  color: white !important;
+  background-color: black !important;
+}

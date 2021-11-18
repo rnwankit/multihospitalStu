@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,13 +12,15 @@ import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
 import List from '../Component/List';
-
+import ThemeContext from '../ThemeContext'
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay]);
 
 function Home(props) {
+    const theme = useContext(ThemeContext)
+
     return (
-        <div>
+        <div className={theme.theme}>
             <section id="hero" className="d-flex align-items-center">
                 <div className="container">
                     <h1>Welcome to City <br />Multispeciality Hospital</h1>
@@ -28,7 +30,7 @@ function Home(props) {
             <main id="main">
                 <section id="why-us" className="why-us">
                 </section>
-                <section id="counts" className="counts">
+                <section id="counts" className={`counts ${theme.theme}`}>
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-3 col-md-6">

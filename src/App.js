@@ -16,31 +16,39 @@ import Delete from './Component/CRUD/Delete';
 import { configureStore } from './redux/store';
 import { Provider } from 'react-redux';
 import Counter from './Container/Counter';
+import ThemeContext, { ThemeProvider } from './ThemeContext';
+import { useState } from 'react';
+
 
 const store = configureStore()
 
 function App() {
+  
+
+  
   return (
     <div>
-      <Provider store={store}>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/departments" component={Departments} />
-          <Route path="/doctors" component={Doctors} />
-          <Route path="/about" component={About} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/add_appointment" component={AddAppointment} />
-          <Route path="/list_appointment" component={ListAppointment} />
-          <Route path="/login" component={Login} />
-          <Route path="/medicine" component={Medicine} />
-          <Route path="/addmedicine" component={AddMedicine} />
-          <Route path="/delete" component={Delete} />
-          <Route path="/counter" component={Counter} />
-          <Redirect to="/" />
-        </Switch>
-        <Footer />
-      </Provider>
+      <ThemeProvider>
+        <Provider store={store}>
+          <Header/>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/departments" component={Departments} />
+            <Route path="/doctors" component={Doctors} />
+            <Route path="/about" component={About} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/add_appointment" component={AddAppointment} />
+            <Route path="/list_appointment" component={ListAppointment} />
+            <Route path="/login" component={Login} />
+            <Route path="/medicine" component={Medicine} />
+            <Route path="/addmedicine" component={AddMedicine} />
+            <Route path="/delete" component={Delete} />
+            <Route path="/counter" component={Counter} />
+            <Redirect to="/" />
+          </Switch>
+          <Footer />
+        </Provider>
+      </ThemeProvider>
     </div>
   );
 }

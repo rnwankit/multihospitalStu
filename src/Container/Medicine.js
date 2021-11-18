@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input } from 'reactstrap';
 import List from '../Component/List';
 import Loading from '../Component/Loading';
 import { deleteMedicine, fetchMedicines } from '../redux/actions/medicines.action';
+import ThemeContext from '../ThemeContext';
 import AddMedicine from './AddMedicine';
 
 function Medicine(props) {
@@ -76,46 +77,51 @@ function Medicine(props) {
 
     let finalData = filterData ? filterData : sortData ? sortData : medicines.medicines;
 
+    const theme = useContext(ThemeContext)
+
     return (
-        <div className="container ">
-            <AddMedicine update={update} />
-            <div className="row">
-                <div className="col-md-5">
-                    <Input type="search" onChange={(e) => handleSearch(e)} placeholder="Search" />
+        <section className={theme.theme}>
+            <div className="container">
+                <AddMedicine update={update} />
+                <div className="row">
+                    <div className="col-md-5">
+                        <Input type="search" onChange={(e) => handleSearch(e)} placeholder="Search" />
+                    </div>
+                    <div className="col-md-5">
+                        <Input type="select" name="sort" value={sort} onChange={(e) => handleSort(e)}>
+                            <option value="0">Select</option>
+                            <option value="pl">Price: Low to High</option>
+                            <option value="ph">Price: High to Low</option>
+                            <option value="name">Name</option>
+                            <option value="quantity">Quantity</option>
+                            <option value="expiry">Expiry</option>
+                        </Input>
+                    </div>
                 </div>
-                <div className="col-md-5">
-                    <Input type="select" name="sort" value={sort} onChange={(e) => handleSort(e)}>
-                        <option value="0">Select</option>
-                        <option value="pl">Price: Low to High</option>
-                        <option value="ph">Price: High to Low</option>
-                        <option value="name">Name</option>
-                        <option value="quantity">Quantity</option>
-                        <option value="expiry">Expiry</option>
-                    </Input>
+                <div className="row">
+                    {
+                        !medicines.isLoading ?
+                            finalData !== undefined && finalData.length > 0 ?
+                                finalData.map((d, index) => {
+                                    return (
+                                        <List
+                                            onDelete={() => handleDelete(d.id)}
+                                            onEdit={() => handleEdit(d.id)}
+                                            id={d.id}
+                                            name={d.name}
+                                            price={d.price}
+                                            quantity={d.quantity}
+                                            expiry={d.expiry} />
+                                    )
+                                })
+                                : <div className='text-center'><p className="errMsg">{medicines.errMsg}</p></div>
+                            : search !== '' ? <div className='text-center'> <h4>Not found</h4> </div>
+                                : <Loading />
+                    }
                 </div>
             </div>
-            <div className="row">
-                {
-                    !medicines.isLoading ?
-                    finalData !== undefined && finalData.length > 0 ? 
-                        finalData.map((d, index) => {
-                            return (
-                                <List
-                                    onDelete={() => handleDelete(d.id)}
-                                    onEdit={() => handleEdit(d.id)}
-                                    id={d.id}
-                                    name={d.name}
-                                    price={d.price}
-                                    quantity={d.quantity}
-                                    expiry={d.expiry} />
-                            )
-                        })
-                        : <div className='text-center'><p className="errMsg">{medicines.errMsg}</p></div>
-                        : search !== '' ? <div className='text-center'> <h4>Not found</h4> </div>
-                    : <Loading />
-                }
-            </div>
-        </div>
+        </section>
+
     );
 }
 
