@@ -18,6 +18,7 @@ import { Provider } from 'react-redux';
 import Counter from './Container/Counter';
 import ThemeContext, { ThemeProvider } from './ThemeContext';
 import { useState } from 'react';
+import Patients from './Container/Patients';
 
 
 const store = configureStore()
@@ -44,6 +45,7 @@ function App() {
             <Route path="/addmedicine" component={AddMedicine} />
             <Route path="/delete" component={Delete} />
             <Route path="/counter" component={Counter} />
+            <Route path="/patients" component={Patients} />
             <Redirect to="/" />
           </Switch>
           <Footer />

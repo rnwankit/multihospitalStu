@@ -1,8 +1,5 @@
 import * as ActionTypes from '../ActionTypes'
 import { baseUrl } from '../../shared/baseUrl';
-import { configureStore } from '../store';
-
-const store = configureStore()
 
 export const fetchMedicines = () => (dispatch) => {
   dispatch(medicinesLoading(true));

@@ -30,7 +30,7 @@ const Header = (props) => {
                         <div className="logo">
                             <NavLink className="nav-link scrollto" to="/" activeClassName="active1">
                                 <h1 className="logo me-auto">City</h1><br />
-                                <h2 className="logo-tiny-text me-auto">Multispeciality Hospital</h2>                           
+                                <h2 className="logo-tiny-text me-auto">Hospital</h2>                           
                             </NavLink>
                         </div>
                         <nav id="navbar" className="navbar order-last order-lg-0">
@@ -47,6 +47,11 @@ const Header = (props) => {
                              <li>
                                  <NavLink className="nav-link scrollto" to="/doctors">
                                      Doctors
+                                 </NavLink>
+                             </li>
+                             <li>
+                                 <NavLink className="nav-link scrollto" to="/patients">
+                                    Patients
                                  </NavLink>
                              </li>
                              <li>
