@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { NavLink } from 'react-router-dom';
 import ThemeContext from '../ThemeContext';
 
 function Footer(props) {
@@ -25,7 +26,16 @@ function Footer(props) {
                     <a href="#" className="google-plus"><i className="bx bxl-skype" /></a>
                     <a href="#" className="linkedin"><i className="bx bxl-linkedin" /></a>
                 </div>
+                <div className="me-md-auto text-center text-md-start">
+                    <NavLink className="nav-link scrollto" to="/useMemo">
+                        useMemo
+                    </NavLink>
+                    <NavLink className="nav-link scrollto" to="/useCallback">
+                        useCallback
+                    </NavLink>
+                </div>
             </div>
+            
         </footer>
 
     );

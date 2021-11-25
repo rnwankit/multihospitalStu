@@ -19,6 +19,8 @@ import Counter from './Container/Counter';
 import ThemeContext, { ThemeProvider } from './ThemeContext';
 import { useState } from 'react';
 import Patients from './Container/Patients';
+import useMemoExample from './Container/Examples/useMemoExample';
+import useCallbackExample from './Container/Examples/useCallbackExample';
 
 
 const store = configureStore()
@@ -46,6 +48,8 @@ function App() {
             <Route path="/delete" component={Delete} />
             <Route path="/counter" component={Counter} />
             <Route path="/patients" component={Patients} />
+            <Route path="/useMemo" component={useMemoExample} />
+            <Route path="/useCallback" component={useCallbackExample} />
             <Redirect to="/" />
           </Switch>
           <Footer />
