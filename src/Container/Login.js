@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { signUp } from '../common/api/auth.api'
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -11,7 +12,14 @@ const Login = () => {
     }
 
     const handleSignup = () => {
-
+        console.log("handleSignup");
+        try {
+            signUp(email, password)
+                .then((resolve) => console.log(resolve))
+                .catch((error) => console.log(error))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleResetPassword = () => {
