@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { signUp } from '../common/api/auth.api'
+import { signupUserAction } from '../redux/actions/auth.action'
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -7,19 +9,18 @@ const Login = () => {
     const [userType, setUserType] = useState('Login')
     const [reset, setReset] = useState(false)
 
+    const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
+
+    console.log(auth);
+
     const handleLogin = () => {
 
     }
 
     const handleSignup = () => {
-        console.log("handleSignup");
-        try {
-            signUp(email, password)
-                .then((resolve) => console.log(resolve))
-                .catch((error) => console.log(error))
-        } catch (error) {
-            console.log(error)
-        }
+        dispatch(signupUserAction({email, password}))
+        
     }
 
     const handleResetPassword = () => {
