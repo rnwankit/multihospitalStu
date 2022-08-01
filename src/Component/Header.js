@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import Alert from './Alert/Alert';
 
 const Header = () => {
     return (
@@ -73,6 +74,7 @@ const Header = () => {
                         <NavLink to="/Login" className="appointment-btn scrollto">
                             <span className="d-none d-md-inline">Login/ Signup</span>
                         </NavLink>
+                        <Alert />
                     </div>
                 </header>
             </div>
